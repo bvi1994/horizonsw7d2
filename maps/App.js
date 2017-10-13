@@ -3,7 +3,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  View
+  View,
+  AsyncStorage
  } from 'react-native';
 
 import {
@@ -72,6 +73,13 @@ class App extends React.Component {
     )
   }
 
+  componentDidMount(){
+    AsyncStorage.getItem('region')
+      .then((result) =>{
+        this.setState({region: JSON.parse(result)})
+      });
+  }
+
   render() {
     return (
       <View style={{
@@ -109,7 +117,7 @@ class App extends React.Component {
             <Text>Current Location</Text>
           </TouchableOpacity>
         </View>
-        <MapView style={{flex: 7}} region={this.state.region} />
+        <MapView style={{flex: 7}} region={this.state.region} onRegionChange={(region) => AsyncStorage.setItem('region', JSON.stringify(region))}/>
       </View>
     );
   }
